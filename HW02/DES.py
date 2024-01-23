@@ -218,7 +218,7 @@ class DES():
         readfile = BitVector(filename = image_file)
         plaintext_bv = BitVector(size = 0)
         while (readfile.more_to_read):
-            plaintext_bv += readfile.read_bits_from_file(8)    
+            plaintext_bv += readfile.read_bits_from_file(BLOCKSIZE)
         
         numReturns = 0
         i = 0    
