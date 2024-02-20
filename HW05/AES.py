@@ -85,7 +85,7 @@ class AES ():
 
     def subBytes(self, stateArray):
         # SubBytes
-        if(self.toggle == '-e' or self.toggle == '-i'):
+        if(self.toggle != '-d'):
             for i in range(4):
                 for j in range(4):
                     index = stateArray[j][i]
@@ -103,7 +103,7 @@ class AES ():
     
     def shiftRows(self, stateArray):
         # ShiftRows
-        if(self.toggle == '-e' or self.toggle == '-i'):
+        if(self.toggle != '-d'):
             return [[stateArray[0][0], stateArray[0][1], stateArray[0][2], stateArray[0][3]],
                     [stateArray[1][1], stateArray[1][2], stateArray[1][3], stateArray[1][0]],
                     [stateArray[2][2], stateArray[2][3], stateArray[2][0], stateArray[2][1]],
@@ -122,7 +122,7 @@ class AES ():
             for j in range(4):
                 for k in range(4):
                     # MixCols
-                    if(self.toggle == '-e' or self.toggle == '-i'):
+                    if(self.toggle != '-d'):
                         temp[i][j] ^= self.mixColsTable[i][k].gf_multiply_modular(stateArray[k][j], self.AES_modulus, 8)
                     # InvMixCols
                     elif(self.toggle == '-d'):
@@ -363,10 +363,10 @@ class AES ():
             sys.exit("Key generation needs 32 characters exactly!")
         key_bv = BitVector(textstring = key_text)  
 
-        
+        dt_enc = self.encrypt_x931(dt, key_bv)
         randNums = []
+
         for i in range(totalNum):
-            dt_enc = self.encrypt_x931(dt, key_bv)
             rand = dt_enc ^ v0
             rand = self.encrypt_x931(rand, key_bv)
             randNums.append(rand)
@@ -376,7 +376,7 @@ class AES ():
 
         with open(outfile, "w") as fpout:
             for nums in randNums:
-                fpout.write(nums)
+                fpout.write(str(nums.int_val()) + '\n')
 
 
 
